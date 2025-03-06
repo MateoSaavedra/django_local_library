@@ -21,7 +21,15 @@ urlpatterns = [
 
     # part 8: for viewing the books a user has borrowed
     path('mybooks/', views.LoanedBooksByUserListView.as_view(), name='my-borrowed'),
-    
+
     # part 8 challenge: for viewing all borrowed books
-    path(r'borrowed/', views.LoanedBooksAllListView.as_view(), name='all-borrowed'),
+    path('borrowed/', views.LoanedBooksAllListView.as_view(), name='all-borrowed'),
+
+    # part 9: URL configuration for the renew-books page
+    path('book/<uuid:pk>/renew/', views.renew_book_librarian, name='renew-book-librarian'),
+
+    # part 9: URL configuration for the author create, update, and delete pages
+    path('author/create/', views.AuthorCreate.as_view(), name='author-create'),
+    path('author/<int:pk>/update/', views.AuthorUpdate.as_view(), name='author-update'),
+    path('author/<int:pk>/delete/', views.AuthorDelete.as_view(), name='author-delete'),
 ]
