@@ -1,10 +1,9 @@
 from django.shortcuts import render
+from django.db.models import Q
 from django.views import generic
 
 # Create your views here.
 from .models import Book, Author, BookInstance, Genre
-from django.db.models import Q
-
 
 def index(request):
     """View function for home page of site."""
@@ -19,21 +18,24 @@ def index(request):
     # The 'all()' is implied by default.
     num_authors = Author.objects.count()
 
-    # Count total genres
-    num_genres = Genre.objects.count()
+    genre_counts = {
+        "history": Genre.objects.filter(name__icontains='history').count(),
+        "drama": Genre.objects.filter(name__icontains='drama').count(),
+        "adventure": Genre.objects.filter(name__icontains='adventure').count(),
+    }
 
-    # Count books containing a specific word (e.g., "adventure", case insensitive)
-    search_word = "harry"
-    num_books_with_word = Book.objects.filter(title__icontains=search_word).count()
+    # chained filters are "AND"ed together, resulting in the "intersection" or "conjunction", but I wanted
+    # the "OR"ed result (or "disjunction" or "union") so I used the Q object (note the added import above)
+    # https://docs.djangoproject.com/en/5.0/topics/db/queries/#complex-lookups-with-q-objects
+    magic_books_count = Book.objects.filter(Q(title__icontains='magic') | Q(summary__icontains='magic')).count()
 
     context = {
         'num_books': num_books,
         'num_instances': num_instances,
         'num_instances_available': num_instances_available,
         'num_authors': num_authors,
-        'num_genres': num_genres,
-        'num_books_with_word': num_books_with_word,
-        'search_word': search_word,
+        'genre_counts': genre_counts,
+        'magic_books_count': magic_books_count,
     }
 
     # Render the HTML template index.html with the data in the context variable

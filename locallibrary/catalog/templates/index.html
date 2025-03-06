@@ -17,7 +17,13 @@
     <li><strong>Copies:</strong> {{ num_instances }}</li>
     <li><strong>Copies available:</strong> {{ num_instances_available }}</li>
     <li><strong>Authors:</strong> {{ num_authors }}</li>
-    <li><strong>Genres:</strong> {{ num_genres }}</li>
-    <li><strong>Books containing "{{ search_word }}":</strong> {{ num_books_with_word }}</li>
+    <li><strong>Genres:</strong> 
+      <ul>
+        {% for kind,count in genre_counts.items %}
+        <li><strong>{{ kind }}</strong>: {{ count }}</li>
+        {% endfor %}
+      </ul>
+    </li>
+    <li><strong>"Magic" books:</strong> {{ magic_books_count }}</li>
   </ul>
 {% endblock %}

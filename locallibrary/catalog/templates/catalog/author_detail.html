@@ -1,0 +1,15 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Name: {{ author }}</h1>
+  <h2>Author's Books</h2>
+  {% if not author.book_set %}
+    <p>There are no books from this author in our library's collection.</p>
+  {% endif %}
+  <ul>
+    {% for book in author.book_set.all %}
+      <a href="{{ book.get_absolute_url }}">{{ book.title }}</a>
+    {% endfor %}
+  </ul>
+  
+{% endblock %}
