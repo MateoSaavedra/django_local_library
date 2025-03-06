@@ -4,6 +4,11 @@ from django.urls import reverse # Used in get_absolute_url() to get URL for spec
 from django.db.models import UniqueConstraint # Constrains fields to unique values
 from django.db.models.functions import Lower # Returns lower cased value of field
 
+import uuid # Required for unique book instances
+from datetime import date
+from django.conf import settings # Required to assign User as a borrower (for BookInstance model)
+
+
 class Genre(models.Model):
     """Model representing a book genre."""
     name = models.CharField(
@@ -94,12 +99,6 @@ class Book(models.Model):
         return reverse('book-detail', args=[str(self.id)])
 
 
-import uuid # Required for unique book instances
-
-from datetime import date
-
-from django.conf import settings  # Required to assign User as a borrower
-
 class BookInstance(models.Model):
 
     """Model representing a specific copy of a book (i.e. that can be borrowed from the library)."""
@@ -109,8 +108,7 @@ class BookInstance(models.Model):
     imprint = models.CharField(max_length=200)
     due_back = models.DateField(null=True, blank=True)
 
-    borrower = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
+    borrower = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
 
     @property
     def is_overdue(self):
