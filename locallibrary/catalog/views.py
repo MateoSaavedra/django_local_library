@@ -78,3 +78,14 @@ class LoanedBooksByUserListView(LoginRequiredMixin,generic.ListView):
             .filter(status__exact='o')
             .order_by('due_back')
         )
+    
+
+# list of all books on loan. Only visible to users with can_mark_returned permission.
+class LoanedBooksAllListView(LoginRequiredMixin,generic.ListView):
+    model = BookInstance
+    permission_required = 'catalog.can_mark_returned'
+    template_name = 'catalog/bookinstance_list_borrowed_all.html'
+    paginate_by = 10
+
+    def get_queryset(self):
+        return BookInstance.objects.filter(status__exact='o').order_by('due_back')

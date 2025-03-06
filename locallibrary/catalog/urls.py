@@ -21,4 +21,7 @@ urlpatterns = [
 
     # part 8: for viewing the books a user has borrowed
     path('mybooks/', views.LoanedBooksByUserListView.as_view(), name='my-borrowed'),
+    
+    # part 8 challenge: for viewing all borrowed books
+    path(r'borrowed/', views.LoanedBooksAllListView.as_view(), name='all-borrowed'),
 ]
